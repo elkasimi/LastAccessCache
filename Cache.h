@@ -1,11 +1,12 @@
 #include <list>
 #include <unordered_map>
+#include <cassert>
 
-template < class Key, class Value, class Func >
+template < class Key, class T, class UnaryOperation >
 class Cache
 {
 public:
-    Cache( size_t max_size, Func f )
+    Cache( size_t max_size, UnaryOperation f )
         : m_max_size( max_size )
         , f( f )
     {
@@ -15,7 +16,7 @@ public:
     {
     }
 
-    const Value& operator[]( const Key& key )
+    const T& operator[]( const Key& key )
     {
         const auto iterator = m_values.find( key );
         if ( iterator == m_values.cend( ) )
@@ -25,7 +26,7 @@ public:
             // the element less accessed
             if ( m_keys.size( ) == m_max_size )
             {
-                m_values.erase( m_values.find( m_keys.front( ) ) );
+                m_values.erase( m_keys.front() );
                 m_keys.pop_front( );
             }
 
@@ -49,8 +50,8 @@ public:
 private:
     using ConstKeyIterator = typename std::list< Key >::const_iterator;
 
-    std::unordered_map< Key, std::pair< Value, ConstKeyIterator > > m_values;
+    std::unordered_map< Key, std::pair< T, ConstKeyIterator > > m_values;
     std::list< Key > m_keys;
     size_t m_max_size;
-    Func f;
+    UnaryOperation f;
 };
