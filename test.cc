@@ -8,7 +8,7 @@ main( )
 {
     int calls = 0;
 
-    // define your expensive function to be retrieve the value of a key
+    // define your expensive function to retrieve the value of a key
     auto fetch_row = [&calls]( int i ) {
         ++calls;
         return std::string( "row_" ) + std::to_string( i );
