@@ -43,6 +43,7 @@ public:
             // of keys to be removed
             const auto key_iterator = iterator->second.second;
             m_keys.splice( key_iterator, m_keys, std::next( key_iterator ), m_keys.cend( ) );
+            iterator->second.second = std::prev( m_keys.cend( ) );
             return iterator->second.first;
         }
     }
